@@ -1,15 +1,13 @@
 import React from 'react';
 import { 
-  Calendar, 
+  Compass, 
   Ticket, 
   LayoutDashboard, 
   Shield, 
   User, 
   LogOut, 
   Smartphone, 
-  QrCode, 
-  Sparkles,
-  Compass
+  QrCode
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -18,15 +16,15 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
 
   return (
     <>
-      {/* Top Header (Slim & Clean on Mobile, Rich on Desktop) */}
+      {/* Top Header (Clean, Warm Editorial Light Style) */}
       <nav style={{
         position: 'sticky',
         top: 0,
         zIndex: 1000,
-        background: 'rgba(12, 16, 23, 0.94)',
+        background: 'rgba(255, 255, 255, 0.94)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-subtle)',
+        borderBottom: '1px solid var(--border-card)',
         padding: '10px 0'
       }}>
         <div className="container" style={{
@@ -48,14 +46,14 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(244, 63, 94, 0.35)',
+              boxShadow: 'var(--shadow-primary)',
               flexShrink: 0
             }}>
               <Ticket size={20} color="#fff" />
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
+                <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
                   VESIT EventHub
                 </span>
                 <span style={{
@@ -63,27 +61,28 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                   fontWeight: 700,
                   padding: '2px 6px',
                   borderRadius: '6px',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  color: 'var(--text-secondary)'
+                  background: 'var(--bg-surface-elevated)',
+                  color: 'var(--text-secondary)',
+                  border: '1px solid var(--border-card)'
                 }}>
                   CAMPUS
                 </span>
               </div>
-              <div className="navbar-brand-subtext" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                Official Campus Events &amp; Passes
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                Official Passes &amp; Attendance
               </div>
             </div>
           </div>
 
-          {/* Desktop Navigation Tabs (Hidden on Mobile) */}
+          {/* Desktop Navigation Tabs */}
           <div className="desktop-nav-tabs" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            background: 'rgba(255, 255, 255, 0.04)',
+            background: 'var(--bg-surface-elevated)',
             padding: '4px',
             borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-subtle)'
+            border: '1px solid var(--border-card)'
           }}>
             <button
               onClick={() => setActiveTab('events')}
@@ -93,10 +92,12 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                 gap: '6px',
                 padding: '7px 14px',
                 borderRadius: '8px',
-                background: activeTab === 'events' ? 'var(--color-primary)' : 'transparent',
-                color: activeTab === 'events' ? '#fff' : 'var(--text-secondary)',
+                background: activeTab === 'events' ? 'var(--bg-surface)' : 'transparent',
+                color: activeTab === 'events' ? 'var(--color-primary)' : 'var(--text-secondary)',
                 fontWeight: 600,
                 fontSize: '0.86rem',
+                border: activeTab === 'events' ? '1px solid var(--border-card)' : 'none',
+                boxShadow: activeTab === 'events' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
                 transition: 'all 0.15s'
               }}
             >
@@ -116,10 +117,12 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                   gap: '6px',
                   padding: '7px 14px',
                   borderRadius: '8px',
-                  background: activeTab === 'registrations' ? 'var(--color-primary)' : 'transparent',
-                  color: activeTab === 'registrations' ? '#fff' : 'var(--text-secondary)',
+                  background: activeTab === 'registrations' ? 'var(--bg-surface)' : 'transparent',
+                  color: activeTab === 'registrations' ? 'var(--color-primary)' : 'var(--text-secondary)',
                   fontWeight: 600,
                   fontSize: '0.86rem',
+                  border: activeTab === 'registrations' ? '1px solid var(--border-card)' : 'none',
+                  boxShadow: activeTab === 'registrations' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
                   transition: 'all 0.15s'
                 }}
               >
@@ -137,10 +140,12 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                   gap: '6px',
                   padding: '7px 14px',
                   borderRadius: '8px',
-                  background: activeTab === 'scanner' ? 'var(--color-success)' : 'transparent',
-                  color: activeTab === 'scanner' ? '#fff' : 'var(--text-secondary)',
+                  background: activeTab === 'scanner' ? 'var(--bg-surface)' : 'transparent',
+                  color: activeTab === 'scanner' ? 'var(--color-success)' : 'var(--text-secondary)',
                   fontWeight: 600,
                   fontSize: '0.86rem',
+                  border: activeTab === 'scanner' ? '1px solid var(--border-card)' : 'none',
+                  boxShadow: activeTab === 'scanner' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
                   transition: 'all 0.15s'
                 }}
               >
@@ -158,10 +163,12 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                   gap: '6px',
                   padding: '7px 14px',
                   borderRadius: '8px',
-                  background: activeTab === 'admin' ? 'var(--color-primary)' : 'transparent',
-                  color: activeTab === 'admin' ? '#fff' : 'var(--text-secondary)',
+                  background: activeTab === 'admin' ? 'var(--bg-surface)' : 'transparent',
+                  color: activeTab === 'admin' ? 'var(--color-primary)' : 'var(--text-secondary)',
                   fontWeight: 600,
                   fontSize: '0.86rem',
+                  border: activeTab === 'admin' ? '1px solid var(--border-card)' : 'none',
+                  boxShadow: activeTab === 'admin' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
                   transition: 'all 0.15s'
                 }}
               >
@@ -196,23 +203,23 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  padding: '5px 10px',
+                  background: 'var(--bg-surface-elevated)',
+                  padding: '4px 10px',
                   borderRadius: 'var(--radius-full)',
-                  border: '1px solid var(--border-subtle)'
+                  border: '1px solid var(--border-card)'
                 }}>
                   <div style={{
                     width: '24px',
                     height: '24px',
                     borderRadius: '50%',
-                    background: isAdmin ? '#8b5cf6' : (isScanner ? '#10b981' : '#f43f5e'),
+                    background: isAdmin ? '#8b5cf6' : (isScanner ? '#059669' : '#e11d48'),
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
                     {isAdmin ? <Shield size={12} color="#fff" /> : (isScanner ? <QrCode size={12} color="#fff" /> : <User size={12} color="#fff" />)}
                   </div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {user.name.split(' ')[0]}
                   </div>
                 </div>
@@ -252,17 +259,17 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenMobi
           bottom: 0,
           left: 0,
           right: 0,
-          height: '64px',
-          background: 'rgba(15, 20, 29, 0.97)',
+          height: '62px',
+          background: 'rgba(255, 255, 255, 0.97)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid var(--border-subtle)',
+          borderTop: '1px solid var(--border-card)',
           zIndex: 9990,
           display: 'none',
           alignItems: 'center',
           justifyContent: 'space-around',
           padding: '0 8px',
-          boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)'
+          boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.04)'
         }}
       >
         {/* Tab 1: Discover Events */}

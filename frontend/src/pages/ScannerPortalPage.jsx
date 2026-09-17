@@ -350,7 +350,7 @@ export default function ScannerPortalPage({ onOpenAuth }) {
           style={{ fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer' }}
         >
           {events.map(ev => (
-            <option key={ev.event_id} value={ev.event_id} style={{ background: '#1e293b' }}>
+            <option key={ev.event_id} value={ev.event_id}>
               {ev.event_name} ({ev.venue} • {ev.date})
             </option>
           ))}
@@ -360,31 +360,31 @@ export default function ScannerPortalPage({ onOpenAuth }) {
       {/* Live Gate Headcount Metrics */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
         gap: '12px',
         marginBottom: '24px'
       }}>
-        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid #10b981' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Admitted</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#34d399' }}>{checkedInCount}</div>
+        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid var(--color-success)' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Admitted</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-success)' }}>{checkedInCount}</div>
           <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Students Inside</div>
         </div>
-        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid #3b82f6' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Confirmed</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#60a5fa' }}>{confirmedAttendees.length}</div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Ticket Holders</div>
+        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid var(--color-primary)' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Confirmed</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-primary)' }}>{confirmedAttendees.length}</div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Pass Holders</div>
         </div>
-        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid #f59e0b' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Pending</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#fbbf24' }}>
+        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid var(--color-warning)' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Pending</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-warning)' }}>
             {Math.max(0, confirmedAttendees.length - checkedInCount)}
           </div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>At Gate / Queued</div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Queued / Outside</div>
         </div>
-        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid #8b5cf6' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Turnout</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#c084fc' }}>{attendanceRate}%</div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Check-in Rate</div>
+        <div className="glass-panel" style={{ padding: '14px', textAlign: 'center', borderLeft: '4px solid #6366f1' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Turnout</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#4f46e5' }}>{attendanceRate}%</div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Gate Check-in</div>
         </div>
       </div>
 
@@ -415,8 +415,8 @@ export default function ScannerPortalPage({ onOpenAuth }) {
           <div className="glass-panel" style={{
             padding: '28px 20px',
             textAlign: 'center',
-            background: 'rgba(15, 23, 42, 0.75)',
-            border: '2px dashed rgba(59, 130, 246, 0.4)',
+            background: 'var(--bg-surface)',
+            border: '2px dashed var(--border-card)',
             borderRadius: '20px',
             position: 'relative',
             marginBottom: '20px',
@@ -427,22 +427,22 @@ export default function ScannerPortalPage({ onOpenAuth }) {
               width: '200px',
               height: '200px',
               margin: '0 auto 18px',
-              border: '2px solid #3b82f6',
+              border: '2px solid var(--color-primary)',
               borderRadius: '16px',
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(59, 130, 246, 0.05)',
-              boxShadow: '0 0 24px rgba(59, 130, 246, 0.2)'
+              background: 'var(--bg-surface-elevated)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
             }}>
               {/* Corner brackets */}
-              <div style={{ position: 'absolute', top: -2, left: -2, width: '20px', height: '20px', borderTop: '4px solid #60a5fa', borderLeft: '4px solid #60a5fa', borderTopLeftRadius: '8px' }} />
-              <div style={{ position: 'absolute', top: -2, right: -2, width: '20px', height: '20px', borderTop: '4px solid #60a5fa', borderRight: '4px solid #60a5fa', borderTopRightRadius: '8px' }} />
-              <div style={{ position: 'absolute', bottom: -2, left: -2, width: '20px', height: '20px', borderBottom: '4px solid #60a5fa', borderLeft: '4px solid #60a5fa', borderBottomLeftRadius: '8px' }} />
-              <div style={{ position: 'absolute', bottom: -2, right: -2, width: '20px', height: '20px', borderBottom: '4px solid #60a5fa', borderRight: '4px solid #60a5fa', borderBottomRightRadius: '8px' }} />
+              <div style={{ position: 'absolute', top: -2, left: -2, width: '20px', height: '20px', borderTop: '4px solid var(--color-primary)', borderLeft: '4px solid var(--color-primary)', borderTopLeftRadius: '8px' }} />
+              <div style={{ position: 'absolute', top: -2, right: -2, width: '20px', height: '20px', borderTop: '4px solid var(--color-primary)', borderRight: '4px solid var(--color-primary)', borderTopRightRadius: '8px' }} />
+              <div style={{ position: 'absolute', bottom: -2, left: -2, width: '20px', height: '20px', borderBottom: '4px solid var(--color-primary)', borderLeft: '4px solid var(--color-primary)', borderBottomLeftRadius: '8px' }} />
+              <div style={{ position: 'absolute', bottom: -2, right: -2, width: '20px', height: '20px', borderBottom: '4px solid var(--color-primary)', borderRight: '4px solid var(--color-primary)', borderBottomRightRadius: '8px' }} />
 
-              <QrCode size={72} color="#60a5fa" style={{ opacity: 0.8 }} />
+              <QrCode size={72} color="var(--color-primary)" style={{ opacity: 0.85 }} />
 
               {/* Scanning red laser beam animation */}
               <div style={{
@@ -450,8 +450,8 @@ export default function ScannerPortalPage({ onOpenAuth }) {
                 left: 0,
                 right: 0,
                 height: '3px',
-                background: 'linear-gradient(90deg, transparent, #ef4444, transparent)',
-                boxShadow: '0 0 8px #ef4444',
+                background: 'linear-gradient(90deg, transparent, #e11d48, transparent)',
+                boxShadow: '0 0 8px rgba(225, 29, 72, 0.6)',
                 top: '50%',
                 animation: 'pulse 1.8s ease-in-out infinite'
               }} />

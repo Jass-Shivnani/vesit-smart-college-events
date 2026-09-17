@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, MapPin, Users, AlertTriangle, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, AlertTriangle, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import confetti from 'canvas-confetti';
 
@@ -17,7 +17,7 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
     if (!isLoggedIn) {
       onClose();
       onOpenAuth();
-      showToast('Please sign in or register to book your ticket', 'info');
+      showToast('Please sign in or register to book your pass', 'info');
       return;
     }
 
@@ -37,7 +37,6 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
       const data = await res.json();
 
       if (res.status === 409 && data.conflict) {
-        // Schedule conflict detected
         setConflictError(data);
         showToast('⚠️ Registration blocked: Time overlap conflict detected!', 'error');
         return;
@@ -48,14 +47,13 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
         return;
       }
 
-      // Confetti celebration
       confetti({
         particleCount: 80,
         spread: 60,
         origin: { y: 0.6 }
       });
 
-      showToast(data.message || 'Ticket booked successfully!', 'success');
+      showToast(data.message || 'Pass reserved successfully!', 'success');
       onSuccess(data.registration);
       onClose();
     } catch (err) {
@@ -70,9 +68,11 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
       <div 
         className="modal-dialog-content"
         onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: '480px' }}
       >
         {/* Mobile Bottom Sheet Handle */}
         <div className="sheet-drag-handle" />
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -80,9 +80,9 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
             position: 'absolute',
             top: '18px',
             right: '18px',
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: 'none',
-            color: '#fff',
+            background: 'var(--bg-surface-elevated)',
+            border: '1px solid var(--border-subtle)',
+            color: 'var(--text-secondary)',
             borderRadius: '50%',
             width: '32px',
             height: '32px',
@@ -92,15 +92,15 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
             cursor: 'pointer'
           }}
         >
-          <X size={18} />
+          <X size={16} />
         </button>
 
         {/* Modal Header */}
-        <div style={{ marginBottom: '18px' }}>
-          <span className="badge badge-info" style={{ fontSize: '0.75rem', marginBottom: '8px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <span className="badge badge-workshop" style={{ fontSize: '0.72rem', marginBottom: '8px' }}>
             {event.category}
           </span>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginTop: '4px', lineHeight: 1.3 }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginTop: '4px', lineHeight: 1.3, color: 'var(--text-primary)' }}>
             {event.event_name}
           </h2>
         </div>
@@ -110,92 +110,93 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: '10px',
-          background: 'rgba(255, 255, 255, 0.04)',
-          borderRadius: '14px',
-          padding: '14px',
-          marginBottom: '18px',
-          fontSize: '0.84rem'
+          background: 'var(--bg-surface-elevated)',
+          border: '1px solid var(--border-card)',
+          borderRadius: '12px',
+          padding: '12px 14px',
+          marginBottom: '16px',
+          fontSize: '0.82rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Calendar size={16} color="var(--color-primary)" />
-            <span>{event.date}</span>
+            <Calendar size={15} color="var(--color-primary)" />
+            <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{event.date}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Clock size={16} color="var(--color-primary)" />
-            <span>{event.start_time?.slice(0, 5)} - {event.end_time?.slice(0, 5)}</span>
+            <Clock size={15} color="var(--color-primary)" />
+            <span style={{ color: 'var(--text-secondary)' }}>{event.start_time?.slice(0, 5)} - {event.end_time?.slice(0, 5)}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', gridColumn: '1 / -1' }}>
-            <MapPin size={16} color="var(--color-primary)" />
-            <span>{event.venue}</span>
+            <MapPin size={15} color="var(--color-primary)" />
+            <span style={{ color: 'var(--text-secondary)' }}>{event.venue}</span>
           </div>
         </div>
 
         {/* Live Seat Availability Gauge */}
-        <div style={{ marginBottom: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '6px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '5px' }}>
             <span style={{ color: 'var(--text-muted)' }}>Seat Availability</span>
-            <span style={{ fontWeight: 600 }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
               {event.registered_count || 0} / {event.capacity} Confirmed
             </span>
           </div>
-          <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+          <div style={{ height: '6px', background: '#e5e3dd', borderRadius: '999px', overflow: 'hidden' }}>
             <div style={{
               height: '100%',
               width: `${Math.min(100, Math.round(((event.registered_count || 0) / event.capacity) * 100))}%`,
-              background: isFull ? '#f59e0b' : 'var(--color-primary)',
-              borderRadius: '4px'
+              background: isFull ? 'var(--color-warning)' : 'var(--color-primary)',
+              borderRadius: '999px'
             }} />
           </div>
 
           {isFrozen ? (
             <div style={{
               marginTop: '10px',
-              padding: '10px 14px',
+              padding: '10px 12px',
               borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#fca5a5',
-              fontSize: '0.82rem',
+              background: 'var(--color-danger-subtle)',
+              border: '1px solid #fecaca',
+              color: 'var(--color-danger)',
+              fontSize: '0.8rem',
               display: 'flex',
               alignItems: 'center',
               gap: '8px'
             }}>
-              <AlertTriangle size={16} />
+              <AlertTriangle size={15} />
               <span>Registrations have been closed by college administration.</span>
             </div>
           ) : isFull ? (
             <div style={{
               marginTop: '10px',
-              padding: '10px 14px',
+              padding: '10px 12px',
               borderRadius: '10px',
-              background: 'rgba(245, 158, 11, 0.12)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              color: '#fcd34d',
-              fontSize: '0.82rem',
+              background: 'var(--color-warning-subtle)',
+              border: '1px solid #fde68a',
+              color: 'var(--color-warning)',
+              fontSize: '0.8rem',
               display: 'flex',
               alignItems: 'center',
               gap: '8px'
             }}>
-              <AlertTriangle size={16} />
+              <AlertTriangle size={15} />
               <span>
-                Event is at full capacity! You will be placed on the <strong>Waitlist</strong>. If a confirmed student cancels, you will be automatically promoted.
+                Event is full. You will be placed on the <strong>Waitlist</strong> and auto-promoted if a confirmed attendee cancels.
               </span>
             </div>
           ) : (
             <div style={{
               marginTop: '10px',
-              padding: '10px 14px',
+              padding: '10px 12px',
               borderRadius: '10px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              color: '#6ee7b7',
-              fontSize: '0.82rem',
+              background: 'var(--color-success-subtle)',
+              border: '1px solid #a7f3d0',
+              color: 'var(--color-success)',
+              fontSize: '0.8rem',
               display: 'flex',
               alignItems: 'center',
               gap: '8px'
             }}>
-              <CheckCircle2 size={16} />
-              <span>Seats Available! Guaranteed confirmed entry pass will be generated.</span>
+              <CheckCircle2 size={15} />
+              <span>Seats Available! Guaranteed confirmed entry pass will be issued.</span>
             </div>
           )}
         </div>
@@ -203,20 +204,19 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
         {/* Schedule Conflict Warning */}
         {conflictError && (
           <div style={{
-            marginBottom: '18px',
+            marginBottom: '16px',
             padding: '12px 14px',
             borderRadius: '12px',
-            background: 'rgba(239, 68, 68, 0.15)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#fca5a5',
+            background: 'var(--color-danger-subtle)',
+            border: '1px solid #fecaca',
+            color: 'var(--color-danger)',
             fontSize: '0.82rem'
           }}>
             <div style={{ fontWeight: 700, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <AlertTriangle size={16} /> Overlapping Event Conflict
             </div>
             <div>
-              You are already registered for <strong>{conflictError.conflicting_event?.event_name}</strong> (
-              {conflictError.conflicting_event?.start_time?.slice(0, 5)} - {conflictError.conflicting_event?.end_time?.slice(0, 5)}) on this date.
+              You already hold a pass for <strong>{conflictError.conflicting_event?.event_name}</strong> during this time slot.
             </div>
           </div>
         )}
@@ -224,29 +224,29 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
         {/* Attendee Details Summary */}
         <div style={{
           borderTop: '1px solid var(--border-subtle)',
-          paddingTop: '16px',
-          marginBottom: '20px'
+          paddingTop: '14px',
+          marginBottom: '18px'
         }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '6px' }}>
-            TICKET HOLDER DETAILS
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px', fontWeight: 600 }}>
+            PASS HOLDER
           </div>
           {isLoggedIn ? (
-            <div style={{ fontSize: '0.88rem', color: '#e2e8f0' }}>
-              <strong>{user?.name}</strong> • {user?.email} • <span className="badge badge-info" style={{ fontSize: '0.72rem' }}>{user?.department}</span>
+            <div style={{ fontSize: '0.86rem', color: 'var(--text-primary)' }}>
+              <strong>{user?.name}</strong> • {user?.email} • <span className="badge badge-workshop" style={{ fontSize: '0.7rem' }}>{user?.department}</span>
             </div>
           ) : (
-            <div style={{ fontSize: '0.85rem', color: '#fbbf24' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--color-warning)' }}>
               Not signed in. You will be prompted to sign in to confirm this reservation.
             </div>
           )}
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={onClose}
             className="btn-secondary"
-            style={{ flex: 1, padding: '12px' }}
+            style={{ flex: 1, padding: '10px' }}
           >
             Cancel
           </button>
@@ -256,15 +256,15 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
             className="btn-primary"
             style={{
               flex: 2,
-              padding: '12px',
-              fontSize: '0.95rem',
+              padding: '10px',
+              fontSize: '0.9rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px'
+              gap: '6px'
             }}
           >
-            <ShieldCheck size={18} />
+            <ShieldCheck size={16} />
             {isSubmitting ? 'Reserving...' : isFull ? 'Join Waitlist Queue' : 'Confirm & Generate Pass'}
           </button>
         </div>

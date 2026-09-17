@@ -127,17 +127,17 @@ export default function HomePage({ onViewRegistrations, onNavigateToAdmin, onOpe
     <div className="container" style={{ paddingBottom: '60px' }}>
       {/* Human Campus Hero */}
       <div className="hero-panel glass-panel" style={{
-        marginTop: '20px',
-        marginBottom: '28px',
-        padding: '30px 24px',
+        marginTop: '16px',
+        marginBottom: '24px',
+        padding: '28px 24px',
         borderRadius: 'var(--radius-xl)',
-        background: 'linear-gradient(145deg, #141a24 0%, #0d1219 100%)',
+        background: 'var(--bg-surface)',
         border: '1px solid var(--border-card)',
         position: 'relative',
         overflow: 'hidden'
       }}>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: '720px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
             <span style={{
               fontSize: '0.72rem',
               fontWeight: 700,
@@ -154,19 +154,20 @@ export default function HomePage({ onViewRegistrations, onNavigateToAdmin, onOpe
               fontWeight: 600,
               padding: '3px 10px',
               borderRadius: 'var(--radius-full)',
-              background: 'rgba(255, 255, 255, 0.05)',
-              color: 'var(--text-secondary)'
+              background: 'var(--bg-surface-elevated)',
+              color: 'var(--text-secondary)',
+              border: '1px solid var(--border-card)'
             }}>
-              Spring Term 2026
+              Academic Year 2026
             </span>
           </div>
 
-          <h1 className="hero-title" style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '10px', color: '#fff' }}>
+          <h1 className="hero-title" style={{ fontSize: '1.9rem', fontWeight: 800, lineHeight: 1.25, marginBottom: '8px', color: 'var(--text-primary)' }}>
             Discover and Attend Events Across Campus
           </h1>
 
-          <p className="hero-desc" style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', marginBottom: '18px', lineHeight: 1.55 }}>
-            Reserve entry passes for technical workshops, hackathons, and cultural fests. Your digital ticket stays on your phone with instant QR verification at the gate.
+          <p className="hero-desc" style={{ fontSize: '0.94rem', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.55 }}>
+            Reserve entry passes for workshops, hackathons, and fests. Your pass stays on your phone with instant QR check-in at the gate.
           </p>
 
           {/* Action Row */}

@@ -349,8 +349,8 @@ export default function AdminDashboardPage({ onOpenAuth }) {
       <div style={{
         display: 'flex',
         gap: '8px',
-        borderBottom: '1px solid var(--border-subtle)',
-        marginBottom: '28px'
+        borderBottom: '1px solid var(--border-card)',
+        marginBottom: '24px'
       }}>
         <button
           onClick={() => setActiveTab('analytics')}
@@ -358,9 +358,9 @@ export default function AdminDashboardPage({ onOpenAuth }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '10px 18px',
-            borderBottom: activeTab === 'analytics' ? '2px solid #3b82f6' : '2px solid transparent',
-            color: activeTab === 'analytics' ? '#fff' : 'var(--text-secondary)',
+            padding: '10px 16px',
+            borderBottom: activeTab === 'analytics' ? '2px solid var(--color-primary)' : '2px solid transparent',
+            color: activeTab === 'analytics' ? 'var(--color-primary)' : 'var(--text-secondary)',
             fontWeight: 600,
             background: 'transparent'
           }}
@@ -374,9 +374,9 @@ export default function AdminDashboardPage({ onOpenAuth }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '10px 18px',
-            borderBottom: activeTab === 'events' ? '2px solid #3b82f6' : '2px solid transparent',
-            color: activeTab === 'events' ? '#fff' : 'var(--text-secondary)',
+            padding: '10px 16px',
+            borderBottom: activeTab === 'events' ? '2px solid var(--color-primary)' : '2px solid transparent',
+            color: activeTab === 'events' ? 'var(--color-primary)' : 'var(--text-secondary)',
             fontWeight: 600,
             background: 'transparent'
           }}
@@ -390,9 +390,9 @@ export default function AdminDashboardPage({ onOpenAuth }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '10px 18px',
-            borderBottom: activeTab === 'attendees' ? '2px solid #3b82f6' : '2px solid transparent',
-            color: activeTab === 'attendees' ? '#fff' : 'var(--text-secondary)',
+            padding: '10px 16px',
+            borderBottom: activeTab === 'attendees' ? '2px solid var(--color-primary)' : '2px solid transparent',
+            color: activeTab === 'attendees' ? 'var(--color-primary)' : 'var(--text-secondary)',
             fontWeight: 600,
             background: 'transparent'
           }}
@@ -411,9 +411,9 @@ export default function AdminDashboardPage({ onOpenAuth }) {
       {/* TAB 2: Manage Events CRUD */}
       {activeTab === 'events' && (
         <div className="glass-panel" style={{ overflowX: 'auto', padding: '20px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
+              <tr style={{ borderBottom: '1px solid var(--border-card)', color: 'var(--text-muted)' }}>
                 <th style={{ padding: '12px' }}>Event Name</th>
                 <th style={{ padding: '12px' }}>Category</th>
                 <th style={{ padding: '12px' }}>Date &amp; Time</th>
@@ -424,7 +424,7 @@ export default function AdminDashboardPage({ onOpenAuth }) {
             </thead>
             <tbody>
               {events.map(ev => (
-                <tr key={ev.event_id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <tr key={ev.event_id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                   <td style={{ padding: '14px 12px', fontWeight: 600 }}>{ev.event_name}</td>
                   <td style={{ padding: '14px 12px' }}><span className="badge badge-workshop">{ev.category}</span></td>
                   <td style={{ padding: '14px 12px', color: 'var(--text-secondary)' }}>

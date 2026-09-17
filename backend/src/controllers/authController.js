@@ -64,14 +64,18 @@ async function login(req, res) {
   }
 }
 
-// Register Controller
+// Register Controller - Public signup is STRICTLY for students/attendees
 async function register(req, res) {
   try {
-    const { name, email, password, role = 'student', department = 'CMPN', interests = 'Cloud, AI' } = req.body;
+    const { name, email, password, department = 'CMPN', interests = 'Engineering, Technology' } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
     }
+
+    // Security lockdown: Public registration can NEVER create scanner or admin accounts.
+    // Scanner and Admin privileges must be assigned by college administration.
+    const assignedRole = 'student';
 
     // Check if user already exists
     let existing;
@@ -83,7 +87,7 @@ async function register(req, res) {
     }
 
     if (existing) {
-      return res.status(409).json({ success: false, message: 'User with this email already exists.' });
+      return res.status(409).json({ success: false, message: 'An account with this email already exists.' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -97,7 +101,7 @@ async function register(req, res) {
         name,
         email,
         password: hashedPassword,
-        role,
+        role: assignedRole,
         department,
         interests,
         created_at: new Date()
@@ -106,7 +110,7 @@ async function register(req, res) {
     } else {
       const result = await db.query(
         'INSERT INTO users (name, email, password, role, department, interests) VALUES (?, ?, ?, ?, ?, ?)',
-        [name, email, hashedPassword, role, department, interests]
+        [name, email, hashedPassword, assignedRole, department, interests]
       );
       newUser = {
         user_id: result.insertId,

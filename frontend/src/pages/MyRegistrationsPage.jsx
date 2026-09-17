@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Ticket, Calendar, Clock, MapPin, QrCode, CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
+import { Ticket, Calendar, Clock, MapPin, QrCode, CheckCircle2, AlertCircle } from 'lucide-react';
 import QRModal from '../components/QRModal';
 import { useAuth } from '../context/AuthContext';
 
@@ -50,9 +50,9 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
 
       if (data.success) {
         if (data.auto_promoted) {
-          showToast(`✅ Cancelled. ${data.auto_promoted}`, 'info');
+          showToast(`Pass cancelled. ${data.auto_promoted}`, 'info');
         } else {
-          showToast('Registration cancelled successfully.', 'info');
+          showToast('Pass cancelled successfully.', 'info');
         }
         fetchRegistrations();
       } else {
@@ -67,36 +67,41 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
   const waitlistedList = registrations.filter(r => r.status === 'waitlisted');
 
   return (
-    <div className="container" style={{ padding: '36px 24px 60px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+    <div className="container" style={{ padding: '20px 16px 80px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
         <div style={{
-          width: '44px',
-          height: '44px',
+          width: '42px',
+          height: '42px',
           borderRadius: '12px',
-          background: 'var(--gradient-primary)',
+          background: 'var(--color-primary)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          boxShadow: 'var(--shadow-primary)',
+          flexShrink: 0
         }}>
           <Ticket size={22} color="#fff" />
         </div>
         <div>
-          <h1 style={{ fontSize: '1.8rem', letterSpacing: '-0.02em' }}>My Event Passes &amp; Registrations</h1>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Digital tickets for {user?.name || 'Student'} ({user?.department || 'VESIT'})
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            My Event Passes
+          </h1>
+          <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+            Digital admission passes for {user?.name || 'Student'} ({user?.department || 'VESIT'})
           </p>
         </div>
       </div>
 
       {!isLoggedIn ? (
-        <div className="glass-panel" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
-          <Ticket size={48} color="var(--text-muted)" style={{ margin: '0 auto 16px', display: 'block' }} />
-          <h3>Sign In to Access Your Event Passes</h3>
-          <p style={{ marginTop: '6px', fontSize: '0.9rem', marginBottom: '20px' }}>
-            Please sign in with your student account to view your confirmed BookMyShow digital tickets and waitlist position.
+        <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-secondary)' }}>
+          <Ticket size={44} color="var(--text-muted)" style={{ margin: '0 auto 14px', display: 'block' }} />
+          <h3 style={{ color: 'var(--text-primary)', marginBottom: '6px' }}>Sign In to View Your Passes</h3>
+          <p style={{ fontSize: '0.88rem', marginBottom: '18px' }}>
+            Sign in with your student email to access your active admission QR codes and waitlist queues.
           </p>
-          <button onClick={onOpenAuth} className="btn-primary" style={{ padding: '10px 24px' }}>
-            Sign In / Register
+          <button onClick={onOpenAuth} className="btn-primary" style={{ padding: '9px 22px' }}>
+            Sign In
           </button>
         </div>
       ) : loading ? (
@@ -104,78 +109,82 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
           Loading your passes...
         </div>
       ) : registrations.length === 0 ? (
-        <div className="glass-panel" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
-          <Ticket size={48} color="var(--text-muted)" style={{ margin: '0 auto 16px', display: 'block' }} />
-          <h3>No Active Registrations</h3>
-          <p style={{ marginTop: '6px', fontSize: '0.9rem' }}>Browse upcoming campus events and reserve your seat to receive your digital QR pass.</p>
+        <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-secondary)' }}>
+          <Ticket size={44} color="var(--text-muted)" style={{ margin: '0 auto 14px', display: 'block' }} />
+          <h3 style={{ color: 'var(--text-primary)', marginBottom: '6px' }}>No Active Passes</h3>
+          <p style={{ fontSize: '0.88rem' }}>
+            You haven't reserved tickets for any upcoming events. Browse events to claim your pass.
+          </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
           {/* Confirmed Passes */}
           <div>
-            <h2 style={{ fontSize: '1.3rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={18} color="#34d399" />
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CheckCircle2 size={18} color="var(--color-success)" />
               Confirmed Passes ({confirmedList.length})
             </h2>
 
             {confirmedList.length === 0 ? (
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>No confirmed events.</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.86rem' }}>No confirmed events yet.</div>
             ) : (
               <div className="events-responsive-grid">
                 {confirmedList.map(reg => {
                   const isPresent = reg.attendance_status === 'present';
                   return (
                     <div key={reg.registration_id} className="glass-panel" style={{
-                      padding: '22px',
+                      padding: '20px',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      borderLeft: isPresent ? '4px solid #10b981' : '4px solid #3b82f6'
+                      borderLeft: isPresent ? '4px solid var(--color-success)' : '4px solid var(--color-primary)'
                     }}>
                       <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
                           <span className="badge badge-workshop">{reg.category}</span>
                           {isPresent ? (
                             <span className="badge badge-success">
-                              <CheckCircle2 size={12} /> Present
+                              <CheckCircle2 size={12} /> Admitted at Gate
                             </span>
                           ) : (
-                            <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa' }}>
-                              Awaiting Check-in
+                            <span className="badge" style={{ background: 'var(--bg-surface-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border-card)' }}>
+                              Confirmed Entry
                             </span>
                           )}
                         </div>
 
-                        <h3 style={{ fontSize: '1.15rem', marginBottom: '10px' }}>{reg.event_name}</h3>
+                        <h3 style={{ fontSize: '1.08rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>
+                          {reg.event_name}
+                        </h3>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Calendar size={14} color="#3b82f6" />
-                            {new Date(reg.date).toLocaleDateString()}
+                            <Calendar size={14} color="var(--color-primary)" />
+                            <span>{new Date(reg.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Clock size={14} color="#8b5cf6" />
-                            {reg.start_time?.slice(0, 5)} - {reg.end_time?.slice(0, 5)}
+                            <Clock size={14} color="var(--text-muted)" />
+                            <span>{reg.start_time?.slice(0, 5)} - {reg.end_time?.slice(0, 5)}</span>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <MapPin size={14} color="#06b6d4" />
-                            {reg.venue}
+                            <MapPin size={14} color="var(--text-muted)" />
+                            <span>{reg.venue}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', gap: '10px', marginTop: '12px', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)' }}>
                         <button
                           onClick={() => setActiveQR(reg)}
                           className="btn-primary"
-                          style={{ flex: 1, fontSize: '0.84rem' }}
+                          style={{ flex: 1, fontSize: '0.82rem', padding: '9px 12px' }}
                         >
-                          <QrCode size={16} /> Show QR Pass
+                          <QrCode size={15} /> Show QR Pass
                         </button>
                         <button
                           onClick={() => handleCancel(reg)}
                           className="btn-danger"
-                          style={{ fontSize: '0.82rem' }}
+                          style={{ fontSize: '0.82rem', padding: '9px 12px' }}
                         >
                           Cancel
                         </button>
@@ -190,38 +199,40 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
           {/* Waitlisted Section */}
           {waitlistedList.length > 0 && (
             <div>
-              <h2 style={{ fontSize: '1.3rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertCircle size={18} color="#f59e0b" />
+              <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <AlertCircle size={18} color="var(--color-warning)" />
                 Waitlisted Queue ({waitlistedList.length})
               </h2>
 
               <div className="events-responsive-grid">
                 {waitlistedList.map(reg => (
                   <div key={reg.registration_id} className="glass-panel" style={{
-                    padding: '22px',
-                    borderLeft: '4px solid #f59e0b',
+                    padding: '20px',
+                    borderLeft: '4px solid var(--color-warning)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between'
                   }}>
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
                         <span className="badge badge-waitlist">Waitlist #{reg.waitlist_position}</span>
-                        <span style={{ fontSize: '0.75rem', color: '#fcd34d' }}>Auto-promotes on cancel</span>
+                        <span style={{ fontSize: '0.74rem', color: 'var(--color-warning)' }}>Auto-promotes</span>
                       </div>
 
-                      <h3 style={{ fontSize: '1.15rem', marginBottom: '10px' }}>{reg.event_name}</h3>
+                      <h3 style={{ fontSize: '1.08rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>
+                        {reg.event_name}
+                      </h3>
 
                       <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '14px' }}>
-                        The event reached full capacity. You are queue member #{reg.waitlist_position}. You will automatically gain a confirmed seat if someone cancels.
+                        You are queue position #{reg.waitlist_position}. If a confirmed student cancels their ticket, your pass is promoted automatically.
                       </p>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '12px', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)' }}>
                       <button
                         onClick={() => handleCancel(reg)}
                         className="btn-danger"
-                        style={{ width: '100%', fontSize: '0.82rem' }}
+                        style={{ width: '100%', fontSize: '0.82rem', padding: '9px 12px' }}
                       >
                         Leave Waitlist
                       </button>
