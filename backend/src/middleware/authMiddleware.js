@@ -1,0 +1,42 @@
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'vesit_acc_super_secret_jwt_key_2026';
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Access denied. No authentication token provided.' });
+  }
+
+  // Strict cryptographic JWT verification
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: 'Invalid or expired session token. Please sign in again.' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+function requireAdmin(req, res, next) {
+  if (!req.user || req.user.role !== 'admin') {
+    return res.status(403).json({ success: false, message: 'Unauthorized. Admin privileges required.' });
+  }
+  next();
+}
+
+function requireScannerOrAdmin(req, res, next) {
+  if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'scanner')) {
+    return res.status(403).json({ success: false, message: 'Unauthorized. Gate Staff or Admin privileges required.' });
+  }
+  next();
+}
+
+module.exports = {
+  authenticateToken,
+  requireAdmin,
+  requireScannerOrAdmin,
+  JWT_SECRET
+};

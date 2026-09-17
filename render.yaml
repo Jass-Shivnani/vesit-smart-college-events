@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: vesit-smart-events
+    env: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm run deploy:build
+    startCommand: node backend/src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: vesit_event_super_secret_jwt_key_2026
+      - key: DB_HOST
+        value: localhost

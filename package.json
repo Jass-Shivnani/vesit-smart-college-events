@@ -1,0 +1,17 @@
+{
+  "name": "college-event-management-system-cicd",
+  "version": "1.0.0",
+  "description": "Containerized College Event Management System with CI/CD, Kubernetes, and Smart Conflict Detection",
+  "main": "dev-runner.js",
+  "scripts": {
+    "start": "node dev-runner.js",
+    "start:prod": "node backend/src/server.js",
+    "deploy:build": "npm --prefix frontend install && npm --prefix frontend run build && npm --prefix backend install",
+    "test": "cd backend && npm test",
+    "build": "cd frontend && npm run build",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down -v"
+  },
+  "author": "Group 11 (VESIT D17A)",
+  "license": "ISC"
+}
