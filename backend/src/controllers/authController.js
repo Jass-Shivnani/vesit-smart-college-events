@@ -189,8 +189,87 @@ async function getProfile(req, res) {
   }
 }
 
+// Get All Users (Admin Only)
+async function getAllUsers(req, res) {
+  try {
+    let users;
+    if (db.isFallback()) {
+      users = db.getMockData().users.map(u => ({
+        user_id: u.user_id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        department: u.department,
+        created_at: u.created_at
+      }));
+    } else {
+      users = await db.query('SELECT user_id, name, email, role, department, created_at FROM users ORDER BY user_id ASC');
+    }
+
+    res.json({ success: true, users });
+  } catch (error) {
+    console.error('Fetch users error:', error);
+    res.status(500).json({ success: false, message: 'Failed to retrieve user list.' });
+  }
+}
+
+// Update User Role (Admin Only)
+async function updateUserRole(req, res) {
+  try {
+    const targetUserId = parseInt(req.params.id, 10);
+    const { role } = req.body;
+
+    const validRoles = ['student', 'scanner', 'admin'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid role specified. Must be one of: ${validRoles.join(', ')}`
+      });
+    }
+
+    if (db.isFallback()) {
+      const user = db.getMockData().users.find(u => u.user_id === targetUserId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found.' });
+      }
+      user.role = role;
+      return res.json({
+        success: true,
+        message: `Updated role for ${user.name} to ${role}.`,
+        user: {
+          user_id: user.user_id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      });
+    } else {
+      const rows = await db.query('SELECT user_id, name, email FROM users WHERE user_id = ?', [targetUserId]);
+      if (!rows || rows.length === 0) {
+        return res.status(404).json({ success: false, message: 'User not found.' });
+      }
+      await db.query('UPDATE users SET role = ? WHERE user_id = ?', [role, targetUserId]);
+      return res.json({
+        success: true,
+        message: `Updated role for ${rows[0].name} to ${role}.`,
+        user: {
+          user_id: rows[0].user_id,
+          name: rows[0].name,
+          email: rows[0].email,
+          role
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Update role error:', error);
+    res.status(500).json({ success: false, message: 'Server error updating user role.' });
+  }
+}
+
 module.exports = {
   login,
   register,
-  getProfile
+  getProfile,
+  getAllUsers,
+  updateUserRole
 };

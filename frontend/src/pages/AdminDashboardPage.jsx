@@ -13,10 +13,13 @@ import {
   CheckCircle,
   XCircle,
   ShieldAlert,
+  Shield,
   Lock,
   Unlock,
   Download,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Search,
+  UserCheck
 } from 'lucide-react';
 import QRScannerModal from '../components/QRScannerModal';
 import AnalyticsCharts from '../components/AnalyticsCharts';
@@ -55,6 +58,9 @@ export default function AdminDashboardPage({ onOpenAuth }) {
   const [showQRScanner, setShowQRScanner] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [usersList, setUsersList] = useState([]);
+  const [userSearch, setUserSearch] = useState('');
+  const [loadingUsers, setLoadingUsers] = useState(false);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -82,7 +88,49 @@ export default function AdminDashboardPage({ onOpenAuth }) {
   useEffect(() => {
     fetchEvents();
     fetchAnalytics();
+    fetchUsers();
   }, [user]);
+
+  const fetchUsers = async () => {
+    if (!token) return;
+    try {
+      setLoadingUsers(true);
+      const res = await fetch('/api/auth/users', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.users)) {
+        setUsersList(data.users);
+      }
+    } catch (err) {
+      console.error('Failed to load users:', err);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  const handleUpdateRole = async (userId, newRole, userName) => {
+    if (!window.confirm(`Are you sure you want to change ${userName}'s role to ${newRole.toUpperCase()}?`)) return;
+    try {
+      const res = await fetch(`/api/auth/users/${userId}/role`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ role: newRole })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message || `Role updated to ${newRole}!`, 'success');
+        fetchUsers();
+      } else {
+        showToast(data.message || 'Failed to update role', 'error');
+      }
+    } catch (err) {
+      showToast('Error updating role', 'error');
+    }
+  };
 
   const fetchEvents = async () => {
     try {
@@ -399,6 +447,22 @@ export default function AdminDashboardPage({ onOpenAuth }) {
         >
           <Users size={16} /> Registrations &amp; Attendance
         </button>
+
+        <button
+          onClick={() => setActiveTab('roles')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 16px',
+            borderBottom: activeTab === 'roles' ? '2px solid var(--color-primary)' : '2px solid transparent',
+            color: activeTab === 'roles' ? 'var(--color-primary)' : 'var(--text-secondary)',
+            fontWeight: 600,
+            background: 'transparent'
+          }}
+        >
+          <Shield size={16} /> Staff &amp; Roles ({usersList.length})
+        </button>
       </div>
 
       {/* TAB 1: Analytics */}
@@ -607,6 +671,150 @@ export default function AdminDashboardPage({ onOpenAuth }) {
               </table>
             )}
           </div>
+        </div>
+      )}
+
+      {/* TAB 4: Staff & Role Management */}
+      {activeTab === 'roles' && (
+        <div className="glass-panel" style={{ padding: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                Campus Staff &amp; Role Management
+              </h3>
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                Promote students to Gate Scanner staff or manage administrator credentials
+              </p>
+            </div>
+
+            {/* User Search Bar */}
+            <div style={{ position: 'relative', width: '280px' }}>
+              <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                className="input-field"
+                style={{ paddingLeft: '36px', fontSize: '0.84rem', padding: '8px 12px 8px 36px' }}
+              />
+            </div>
+          </div>
+
+          {loadingUsers ? (
+            <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+              Loading user registry...
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-card)', color: 'var(--text-muted)' }}>
+                    <th style={{ padding: '12px' }}>User Details</th>
+                    <th style={{ padding: '12px' }}>Department</th>
+                    <th style={{ padding: '12px' }}>Current Access Role</th>
+                    <th style={{ padding: '12px', textAlign: 'right' }}>Role Permissions &amp; Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList
+                    .filter(u => {
+                      const q = userSearch.toLowerCase();
+                      return (
+                        u.name?.toLowerCase().includes(q) ||
+                        u.email?.toLowerCase().includes(q) ||
+                        u.department?.toLowerCase().includes(q)
+                      );
+                    })
+                    .map(u => {
+                      const isCurrentUser = user && user.user_id === u.user_id;
+                      const isUserAdmin = u.role === 'admin';
+                      const isUserScanner = u.role === 'scanner';
+
+                      return (
+                        <tr key={u.user_id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                          <td style={{ padding: '14px 12px' }}>
+                            <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                              {u.name} {isCurrentUser && <small style={{ color: 'var(--color-primary)', fontWeight: 600 }}>(You)</small>}
+                            </div>
+                            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{u.email}</div>
+                          </td>
+                          <td style={{ padding: '14px 12px' }}>
+                            <span className="badge badge-workshop" style={{ fontSize: '0.72rem' }}>
+                              {u.department || 'CMPN'}
+                            </span>
+                          </td>
+                          <td style={{ padding: '14px 12px' }}>
+                            {isUserAdmin ? (
+                              <span className="badge" style={{ background: '#f5f3ff', color: '#7c3aed', border: '1px solid #ddd6fe' }}>
+                                <Shield size={12} /> Administrator
+                              </span>
+                            ) : isUserScanner ? (
+                              <span className="badge badge-success">
+                                <Scan size={12} /> Gate Scanner Staff
+                              </span>
+                            ) : (
+                              <span className="badge" style={{ background: 'var(--bg-surface-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border-card)' }}>
+                                Student Attendee
+                              </span>
+                            )}
+                          </td>
+                          <td style={{ padding: '14px 12px', textAlign: 'right' }}>
+                            {isCurrentUser ? (
+                              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                                Active Session
+                              </span>
+                            ) : (
+                              <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                                {u.role !== 'scanner' && (
+                                  <button
+                                    onClick={() => handleUpdateRole(u.user_id, 'scanner', u.name)}
+                                    className="btn-secondary"
+                                    style={{
+                                      padding: '5px 10px',
+                                      fontSize: '0.76rem',
+                                      borderColor: 'rgba(5, 150, 105, 0.3)',
+                                      color: 'var(--color-success)'
+                                    }}
+                                  >
+                                    <Scan size={12} /> Make Gate Scanner
+                                  </button>
+                                )}
+
+                                {u.role !== 'student' && (
+                                  <button
+                                    onClick={() => handleUpdateRole(u.user_id, 'student', u.name)}
+                                    className="btn-secondary"
+                                    style={{ padding: '5px 10px', fontSize: '0.76rem' }}
+                                  >
+                                    Demote to Student
+                                  </button>
+                                )}
+
+                                {u.role !== 'admin' && (
+                                  <button
+                                    onClick={() => handleUpdateRole(u.user_id, 'admin', u.name)}
+                                    className="btn-secondary"
+                                    style={{
+                                      padding: '5px 10px',
+                                      fontSize: '0.76rem',
+                                      borderColor: 'rgba(124, 58, 237, 0.3)',
+                                      color: '#7c3aed'
+                                    }}
+                                  >
+                                    <Shield size={12} /> Promote to Admin
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
