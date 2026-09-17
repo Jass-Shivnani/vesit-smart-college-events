@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertOctagon, Clock, Calendar, MapPin, X, ArrowRight } from 'lucide-react';
+import { CalendarClock, Clock, MapPin, X, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function ConflictModal({ conflictData, onClose }) {
   if (!conflictData) return null;
@@ -7,35 +7,22 @@ export default function ConflictModal({ conflictData, onClose }) {
   const { targetEvent, conflicting_event, message } = conflictData;
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'rgba(0, 0, 0, 0.75)',
-      backdropFilter: 'blur(8px)',
-      padding: '20px'
-    }}>
-      <div className="glass-panel" style={{
-        maxWidth: '540px',
-        width: '100%',
-        background: '#131926',
-        border: '1px solid rgba(244, 63, 94, 0.4)',
-        boxShadow: '0 0 40px rgba(244, 63, 94, 0.25)',
-        padding: '28px',
-        borderRadius: '20px',
-        position: 'relative',
-        animation: 'fadeIn 0.25s ease-out'
-      }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div 
+        className="modal-dialog-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: '520px' }}
+      >
+        {/* Mobile Bottom Sheet Handle */}
+        <div className="sheet-drag-handle" />
+
         {/* Close Button */}
         <button
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '20px',
-            right: '20px',
+            top: '18px',
+            right: '18px',
             background: 'rgba(255, 255, 255, 0.08)',
             border: 'none',
             color: '#fff',
@@ -44,108 +31,121 @@ export default function ConflictModal({ conflictData, onClose }) {
             height: '32px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            cursor: 'pointer'
           }}
         >
           <X size={18} />
         </button>
 
-        {/* Warning Icon & Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
+        {/* Friendly Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
           <div style={{
-            width: '48px',
-            height: '48px',
+            width: '46px',
+            height: '46px',
             borderRadius: '14px',
-            background: 'rgba(244, 63, 94, 0.15)',
-            border: '1px solid rgba(244, 63, 94, 0.4)',
+            background: 'rgba(245, 158, 11, 0.15)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            flexShrink: 0
           }}>
-            <AlertOctagon size={26} color="#fb7185" />
+            <CalendarClock size={24} color="#f59e0b" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.25rem', color: '#fda4af' }}>Schedule Conflict Detected!</h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Backend Logic Conflict Prevention Rule</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
+              Schedule Overlap
+            </h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+              You have another event scheduled at this time
+            </p>
           </div>
         </div>
 
-        <p style={{ fontSize: '0.9rem', color: '#e2e8f0', marginBottom: '20px', lineHeight: 1.5 }}>
-          {message || 'You cannot register for this event because it clashes with an event you are already confirmed for.'}
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '18px', lineHeight: 1.5 }}>
+          {message || 'You already hold a confirmed pass during this exact time. To avoid double booking, college policy allows one active reservation per time slot.'}
         </p>
 
         {/* Conflict Comparison Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '12px',
+          marginBottom: '20px'
+        }}>
           {/* Confirmed Existing Event */}
           <div style={{
             background: 'rgba(244, 63, 94, 0.08)',
             border: '1px solid rgba(244, 63, 94, 0.25)',
-            borderRadius: '12px',
+            borderRadius: '14px',
             padding: '14px'
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fb7185', textTransform: 'uppercase', marginBottom: '6px' }}>
-              Current Registration
+            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#fb7185', textTransform: 'uppercase', marginBottom: '6px' }}>
+              Your Existing Pass
             </div>
-            <div style={{ fontWeight: 600, fontSize: '0.92rem', marginBottom: '6px' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.92rem', marginBottom: '8px', color: '#fff' }}>
               {conflicting_event?.event_name || 'Existing Event'}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Clock size={13} color="#fb7185" />
-              {conflicting_event?.time || '10:00 - 12:00'}
+              <span>{conflicting_event?.time || '10:00 - 12:00'}</span>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
               <MapPin size={13} color="#fb7185" />
-              {conflicting_event?.venue || 'Campus'}
+              <span>{conflicting_event?.venue || 'Campus Venue'}</span>
             </div>
           </div>
 
-          {/* Target Event */}
+          {/* Requested Event */}
           <div style={{
-            background: 'rgba(59, 130, 246, 0.08)',
-            border: '1px solid rgba(59, 130, 246, 0.25)',
-            borderRadius: '12px',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid var(--border-card)',
+            borderRadius: '14px',
             padding: '14px'
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', marginBottom: '6px' }}>
-              Attempted Registration
+            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '6px' }}>
+              New Event Requested
             </div>
-            <div style={{ fontWeight: 600, fontSize: '0.92rem', marginBottom: '6px' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.92rem', marginBottom: '8px', color: '#e2e8f0' }}>
               {targetEvent?.event_name || 'Requested Event'}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <Clock size={13} color="#60a5fa" />
-              {targetEvent?.start_time?.slice(0,5)} - {targetEvent?.end_time?.slice(0,5)}
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Clock size={13} color="var(--text-muted)" />
+              <span>{targetEvent?.start_time?.slice(0,5)} - {targetEvent?.end_time?.slice(0,5)}</span>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
-              <MapPin size={13} color="#60a5fa" />
-              {targetEvent?.venue || 'Campus'}
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+              <MapPin size={13} color="var(--text-muted)" />
+              <span>{targetEvent?.venue || 'Campus Venue'}</span>
             </div>
           </div>
         </div>
 
-        {/* Algorithm Viva Note */}
+        {/* Helpful Human Tip */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: '10px',
-          padding: '12px 16px',
-          fontSize: '0.78rem',
-          color: 'var(--text-muted)',
-          marginBottom: '20px'
+          background: 'rgba(245, 158, 11, 0.08)',
+          border: '1px solid rgba(245, 158, 11, 0.2)',
+          borderRadius: '12px',
+          padding: '12px 14px',
+          fontSize: '0.82rem',
+          color: '#fcd34d',
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
         }}>
-          💡 <strong style={{ color: '#cbd5e1' }}>Algorithm Insight:</strong> Backend checks existing registrations with condition{' '}
-          <code style={{ color: '#93c5fd', background: 'rgba(0,0,0,0.3)', padding: '2px 4px', borderRadius: '4px' }}>
-            StartA &lt; EndB &amp;&amp; EndA &gt; StartB
-          </code>{' '}
-          on the same date to prevent dual booking.
+          <AlertCircle size={18} style={{ flexShrink: 0 }} />
+          <span>
+            If you prefer attending <strong>{targetEvent?.event_name}</strong>, please cancel your existing pass from <strong>My Passes</strong> first.
+          </span>
         </div>
 
         <button
           onClick={onClose}
-          className="btn-secondary"
+          className="btn-primary"
           style={{ width: '100%', justifyContent: 'center' }}
         >
-          Understood, Close
+          Got It
         </button>
       </div>
     </div>

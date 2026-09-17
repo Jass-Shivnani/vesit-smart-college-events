@@ -121,7 +121,7 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
             {confirmedList.length === 0 ? (
               <div style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>No confirmed events.</div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
+              <div className="events-responsive-grid">
                 {confirmedList.map(reg => {
                   const isPresent = reg.attendance_status === 'present';
                   return (
@@ -195,7 +195,7 @@ export default function MyRegistrationsPage({ onOpenAuth }) {
                 Waitlisted Queue ({waitlistedList.length})
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
+              <div className="events-responsive-grid">
                 {waitlistedList.map(reg => (
                   <div key={reg.registration_id} className="glass-panel" style={{
                     padding: '22px',

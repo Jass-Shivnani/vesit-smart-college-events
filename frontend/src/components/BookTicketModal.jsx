@@ -66,27 +66,13 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'rgba(0, 0, 0, 0.8)',
-      backdropFilter: 'blur(10px)',
-      padding: '20px'
-    }}>
-      <div className="glass-panel" style={{
-        maxWidth: '520px',
-        width: '100%',
-        background: '#0f172a',
-        border: '1px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: '24px',
-        padding: '28px',
-        position: 'relative',
-        animation: 'fadeIn 0.2s ease-out'
-      }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div 
+        className="modal-dialog-content"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Mobile Bottom Sheet Handle */}
+        <div className="sheet-drag-handle" />
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -131,15 +117,15 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
           fontSize: '0.84rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Calendar size={16} color="#60a5fa" />
+            <Calendar size={16} color="var(--color-primary)" />
             <span>{event.date}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Clock size={16} color="#60a5fa" />
+            <Clock size={16} color="var(--color-primary)" />
             <span>{event.start_time?.slice(0, 5)} - {event.end_time?.slice(0, 5)}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', gridColumn: '1 / -1' }}>
-            <MapPin size={16} color="#60a5fa" />
+            <MapPin size={16} color="var(--color-primary)" />
             <span>{event.venue}</span>
           </div>
         </div>
@@ -147,7 +133,7 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
         {/* Live Seat Availability Gauge */}
         <div style={{ marginBottom: '18px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '6px' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Seat Allocation</span>
+            <span style={{ color: 'var(--text-muted)' }}>Seat Availability</span>
             <span style={{ fontWeight: 600 }}>
               {event.registered_count || 0} / {event.capacity} Confirmed
             </span>
@@ -156,7 +142,7 @@ export default function BookTicketModal({ event, isOpen, onClose, onSuccess, onO
             <div style={{
               height: '100%',
               width: `${Math.min(100, Math.round(((event.registered_count || 0) / event.capacity) * 100))}%`,
-              background: isFull ? '#f59e0b' : '#3b82f6',
+              background: isFull ? '#f59e0b' : 'var(--color-primary)',
               borderRadius: '4px'
             }} />
           </div>

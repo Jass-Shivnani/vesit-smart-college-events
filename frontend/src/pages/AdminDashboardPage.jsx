@@ -282,7 +282,7 @@ export default function AdminDashboardPage({ onOpenAuth }) {
   }
 
   return (
-    <div className="container" style={{ padding: '36px 24px 60px' }}>
+    <div className="container" style={{ padding: '24px 16px 80px' }}>
       {/* Admin Header */}
       <div style={{
         display: 'flex',
@@ -612,26 +612,14 @@ export default function AdminDashboardPage({ onOpenAuth }) {
 
       {/* Create / Edit Event Modal */}
       {showCreateModal && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(8px)',
-          padding: '20px'
-        }}>
-          <div className="glass-panel" style={{
-            maxWidth: '560px',
-            width: '100%',
-            background: '#111827',
-            padding: '28px',
-            borderRadius: '24px',
-            maxHeight: '90vh',
-            overflowY: 'auto'
-          }}>
+        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+          <div 
+            className="modal-dialog-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '560px' }}
+          >
+            {/* Mobile Bottom Sheet Handle */}
+            <div className="sheet-drag-handle" />
             <h3 style={{ fontSize: '1.3rem', marginBottom: '18px' }}>
               {editingEvent ? 'Edit College Event' : 'Create New College Event'}
             </h3>

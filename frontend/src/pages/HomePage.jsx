@@ -125,109 +125,105 @@ export default function HomePage({ onViewRegistrations, onNavigateToAdmin, onOpe
 
   return (
     <div className="container" style={{ paddingBottom: '60px' }}>
-      {/* Hero Section */}
-      <div style={{
-        marginTop: '36px',
-        marginBottom: '40px',
-        padding: '40px 32px',
-        borderRadius: '24px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%)',
-        border: '1px solid var(--border-subtle)',
+      {/* Human Campus Hero */}
+      <div className="hero-panel glass-panel" style={{
+        marginTop: '20px',
+        marginBottom: '28px',
+        padding: '30px 24px',
+        borderRadius: 'var(--radius-xl)',
+        background: 'linear-gradient(145deg, #141a24 0%, #0d1219 100%)',
+        border: '1px solid var(--border-card)',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '780px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#93c5fd' }}>
-              VESIT D17A MINI-PROJECT
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '720px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+            <span style={{
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              padding: '3px 10px',
+              borderRadius: 'var(--radius-full)',
+              background: 'var(--color-primary-subtle)',
+              color: 'var(--color-primary)',
+              border: '1px solid var(--color-primary-border)'
+            }}>
+              VESIT CAMPUS PASSES
             </span>
-            <span className="badge badge-success">
-              CI/CD & DOCKER READY
+            <span style={{
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              padding: '3px 10px',
+              borderRadius: 'var(--radius-full)',
+              background: 'rgba(255, 255, 255, 0.05)',
+              color: 'var(--text-secondary)'
+            }}>
+              Spring Term 2026
             </span>
           </div>
 
-          <h1 style={{ fontSize: '2.4rem', lineHeight: 1.2, marginBottom: '14px', letterSpacing: '-0.03em' }}>
-            Smart College Event Management System
+          <h1 className="hero-title" style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '10px', color: '#fff' }}>
+            Discover and Attend Events Across Campus
           </h1>
 
-          <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.6 }}>
-            Intelligently manages student event registrations with automated{' '}
-            <strong style={{ color: '#fb7185' }}>Schedule Conflict Detection</strong>,{' '}
-            <strong style={{ color: '#f59e0b' }}>Queue-based Waitlisting</strong>, and{' '}
-            <strong style={{ color: '#34d399' }}>QR-code Attendance Verification</strong>.
+          <p className="hero-desc" style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', marginBottom: '18px', lineHeight: 1.55 }}>
+            Reserve entry passes for technical workshops, hackathons, and cultural fests. Your digital ticket stays on your phone with instant QR verification at the gate.
           </p>
 
-          {/* Action Bar */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+          {/* Action Row */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
             {isAdmin ? (
               <button
                 onClick={() => onNavigateToAdmin && onNavigateToAdmin()}
                 className="btn-primary"
-                style={{ fontSize: '0.88rem', padding: '10px 20px' }}
+                style={{ fontSize: '0.86rem' }}
               >
-                <Sparkles size={16} /> Open Admin Management Portal
+                Open Admin Portal
               </button>
             ) : isLoggedIn ? (
               <button
                 onClick={() => onViewRegistrations && onViewRegistrations()}
                 className="btn-primary"
-                style={{ fontSize: '0.88rem', padding: '10px 20px' }}
+                style={{ fontSize: '0.86rem' }}
               >
-                <Sparkles size={16} /> View My Booked Passes
+                View My Booked Passes
               </button>
             ) : (
               <button
                 onClick={onOpenAuth}
                 className="btn-primary"
-                style={{ fontSize: '0.88rem', padding: '10px 20px' }}
+                style={{ fontSize: '0.86rem' }}
               >
-                <Sparkles size={16} /> Sign In to Reserve Seats
+                Sign In to Reserve Passes
               </button>
             )}
 
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <span className="glass-pill" style={{ fontSize: '0.78rem', padding: '6px 12px', color: '#93c5fd' }}>
-                Instant Scannable QR Pass
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              <span className="glass-pill" style={{ fontSize: '0.72rem', padding: '4px 10px', color: 'var(--text-secondary)' }}>
+                ✓ Instant Mobile Pass
               </span>
-              <span className="glass-pill" style={{ fontSize: '0.78rem', padding: '6px 12px', color: '#6ee7b7' }}>
-                Automated Waitlist Queue
+              <span className="glass-pill" style={{ fontSize: '0.72rem', padding: '4px 10px', color: 'var(--text-secondary)' }}>
+                ✓ Express Gate Entry
               </span>
-              <span className="glass-pill" style={{ fontSize: '0.78rem', padding: '6px 12px', color: '#c084fc' }}>
-                Schedule Conflict Protection
+              <span className="glass-pill" style={{ fontSize: '0.72rem', padding: '4px 10px', color: 'var(--text-secondary)' }}>
+                ✓ Zero Double-Bookings
               </span>
             </div>
           </div>
         </div>
-
-        {/* Decorative Background Blob */}
-        <div style={{
-          position: 'absolute',
-          right: '-60px',
-          top: '-60px',
-          width: '320px',
-          height: '320px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
       </div>
 
-      {/* Smart Recommendations Section */}
+      {/* Recommended for You Section */}
       {recommendations.length > 0 && (
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-            <Sparkles size={20} color="#8b5cf6" />
-            <h2 style={{ fontSize: '1.4rem' }}>Recommended for {user?.name || 'You'}</h2>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              (Based on {user?.department || 'CMPN'} &amp; {user?.interests || 'Cloud'})
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
+            <Sparkles size={16} color="var(--color-primary)" />
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Recommended for You</h2>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              ({user?.department || 'Engineering'} events)
             </span>
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '20px'
-          }}>
+          <div className="events-responsive-grid">
             {recommendations.slice(0, 2).map(event => {
               const reg = userRegistrations.find(r => r.event_id === event.event_id);
               return (
@@ -251,36 +247,35 @@ export default function HomePage({ onViewRegistrations, onNavigateToAdmin, onOpe
       {/* Search & Category Filter Bar */}
       <div style={{
         display: 'flex',
-        flexWrap: 'wrap',
-        gap: '16px',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '28px'
+        flexDirection: 'column',
+        gap: '12px',
+        marginBottom: '24px'
       }}>
         {/* Search */}
-        <div style={{ position: 'relative', minWidth: '280px', flex: 1 }}>
-          <Search size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '16px', top: '14px' }} />
+        <div style={{ position: 'relative', width: '100%' }}>
+          <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '14px', top: '13px' }} />
           <input
             type="text"
-            className="form-input"
-            style={{ paddingLeft: '44px' }}
+            className="input-field"
+            style={{ paddingLeft: '40px', fontSize: '0.88rem' }}
             placeholder="Search events by title, venue, or keyword..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* Category Pills */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        {/* Category Pills (horizontally scrollable on mobile) */}
+        <div className="category-bar-wrapper" style={{ display: 'flex', gap: '6px' }}>
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={selectedCategory === cat ? 'btn-primary' : 'btn-secondary'}
               style={{
-                fontSize: '0.84rem',
-                padding: '8px 16px',
-                borderRadius: 'var(--radius-full)'
+                fontSize: '0.8rem',
+                padding: '6px 14px',
+                borderRadius: 'var(--radius-full)',
+                minHeight: '34px'
               }}
             >
               {cat}
@@ -289,26 +284,27 @@ export default function HomePage({ onViewRegistrations, onNavigateToAdmin, onOpe
         </div>
       </div>
 
-      {/* Events Grid */}
+      {/* Events Section */}
       <div style={{ marginBottom: '20px' }}>
-        <h2 style={{ fontSize: '1.4rem', marginBottom: '18px' }}>
-          Upcoming Campus Events ({filteredEvents.length})
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
+            Upcoming Events ({filteredEvents.length})
+          </h2>
+          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+            Showing {selectedCategory} events
+          </span>
+        </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
+          <div style={{ textAlign: 'center', padding: '50px 0', color: 'var(--text-muted)' }}>
             Loading events...
           </div>
         ) : filteredEvents.length === 0 ? (
-          <div className="glass-panel" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
+          <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-secondary)' }}>
             No events found matching your filter criteria.
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '24px'
-          }}>
+          <div className="events-responsive-grid">
             {filteredEvents.map(event => {
               const reg = userRegistrations.find(r => r.event_id === event.event_id);
               return (

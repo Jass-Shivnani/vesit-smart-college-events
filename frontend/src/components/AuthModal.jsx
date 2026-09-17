@@ -43,27 +43,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'register' })
   const departments = ['CMPN', 'IT', 'EXTC', 'AIDS', 'ETRX'];
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'rgba(0, 0, 0, 0.78)',
-      backdropFilter: 'blur(10px)',
-      padding: '20px'
-    }}>
-      <div className="glass-panel" style={{
-        maxWidth: '480px',
-        width: '100%',
-        background: '#0f172a',
-        border: '1px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: '24px',
-        padding: '28px',
-        position: 'relative',
-        animation: 'fadeIn 0.2s ease-out'
-      }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div 
+        className="modal-dialog-content"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Mobile Bottom Sheet Handle */}
+        <div className="sheet-drag-handle" />
         {/* Close Button */}
         <button
           onClick={onClose}

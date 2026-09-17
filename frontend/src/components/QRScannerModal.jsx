@@ -46,27 +46,14 @@ export default function QRScannerModal({ onClose, onScanSuccess }) {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'rgba(0, 0, 0, 0.75)',
-      backdropFilter: 'blur(8px)',
-      padding: '20px'
-    }}>
-      <div className="glass-panel" style={{
-        maxWidth: '480px',
-        width: '100%',
-        background: '#111827',
-        border: '1px solid var(--border-highlight)',
-        padding: '28px',
-        borderRadius: '24px',
-        position: 'relative',
-        animation: 'fadeIn 0.25s ease-out'
-      }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div 
+        className="modal-dialog-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: '480px' }}
+      >
+        {/* Mobile Bottom Sheet Handle */}
+        <div className="sheet-drag-handle" />
         {/* Close Button */}
         <button
           onClick={onClose}
