@@ -1,15 +1,12 @@
 services:
   - type: web
     name: vesit-smart-events
-    env: node
+    env: docker
     plan: free
     region: frankfurt
-    buildCommand: npm run deploy:build
-    startCommand: node backend/src/server.js
+    dockerfilePath: ./Dockerfile
     envVars:
-      - key: NODE_ENV
-        value: production
+      - key: PORT
+        value: 5000
       - key: JWT_SECRET
-        value: vesit_event_super_secret_jwt_key_2026
-      - key: DB_HOST
-        value: localhost
+        value: vesit_acc_super_secret_jwt_key_2026

@@ -15,33 +15,62 @@ An instant public HTTPS tunnel is currently running from this machine:
 
 ---
 
-## Method 2: Permanent 24/7 Free Cloud Hosting on Render.com
+## Method 2: Free Cloud Docker Container Deployment (Render.com)
 
-Render offers a free tier that hosts full-stack Node.js web services with automatic HTTPS certificates and custom domains.
+Render provides a 100% free tier to build and host **real Docker containers** directly from a `Dockerfile`.
 
-### Step 1: Initialize Git and Push to GitHub
-Open your terminal in `c:\Jass\ACC DEVP\Riya` and run:
-```bash
-git init
-git add .
-git commit -m "Production release of Smart College Event Management System"
-git branch -M main
-```
-Create a new empty repository on [GitHub](https://github.com/new) (e.g. `vesit-event-management`), then link and push:
+### Step 1: Push Repository to GitHub
+Create a new repo on [GitHub](https://github.com/new) and push:
 ```bash
 git remote add origin https://github.com/YOUR_GITHUB_USERNAME/vesit-event-management.git
-git push -u origin main
+git push -u origin master
 ```
 
-### Step 2: Deploy on Render in 1 Click
-1. Go to [https://dashboard.render.com](https://dashboard.render.com) and sign up/sign in (Free).
-2. Click **"New +"** in the top right and select **"Blueprint"** (or **"Web Service"**).
+### Step 2: Deploy Container on Render
+1. Open [https://dashboard.render.com](https://dashboard.render.com) (Free account).
+2. Click **"New +"** $\rightarrow$ **"Blueprint"** (or **"Web Service"**).
 3. Connect your GitHub repository.
-4. Render will automatically detect the [render.yaml](render.yaml) file:
-   - **Build Command**: `npm run deploy:build`
-   - **Start Command**: `node backend/src/server.js`
-5. Click **"Apply"** or **"Create Web Service"**.
-6. Within 2-3 minutes, your app will be live globally at `https://vesit-smart-events.onrender.com` (or your chosen name)!
+4. Render automatically reads [render.yaml](render.yaml):
+   - **Environment**: `Docker`
+   - **Dockerfile**: `./Dockerfile` (Multi-stage build compiling React + Node Alpine)
+   - **Port**: `5000`
+5. Click **"Apply"** — Render's cloud engine will build the Docker container image, spin up the container, and provide a permanent free HTTPS URL (e.g. `https://vesit-smart-events.onrender.com`).
+
+---
+
+## Method 3: Free Cloud Docker Container on Koyeb
+
+Koyeb offers free native Docker container hosting:
+1. Sign in to [https://app.koyeb.com](https://app.koyeb.com) (Free).
+2. Click **"Create App"** $\rightarrow$ **"GitHub"**.
+3. Select your repository.
+4. Choose **"Dockerfile"** builder (points to `./Dockerfile`).
+5. Set port to `5000` and click **"Deploy"**. Koyeb builds and hosts the Docker container in the cloud for free.
+
+---
+
+## Method 4: Local Multi-Container Docker Compose (`docker-compose.yml`)
+
+The project includes a complete microservices architecture in [docker-compose.yml](docker-compose.yml) orchestrating 3 containers:
+* `mysql`: MySQL 8.0 with pre-seeded database volume
+* `backend`: Node.js Express microservice container
+* `frontend`: Nginx Alpine serving the React SPA container
+
+To run it locally on your PC:
+1. Open PowerShell as **Administrator** and run:
+   ```powershell
+   wsl --install
+   ```
+   *(Restart PC once to finish WSL Linux kernel enablement for Docker Desktop)*.
+2. Launch **Docker Desktop** from your start menu.
+3. In this directory, run:
+   ```bash
+   docker-compose up --build
+   ```
+4. Access:
+   - Frontend Nginx: `http://localhost:80`
+   - Backend API: `http://localhost:5000`
+   - MySQL Database: `localhost:3306`
 
 ---
 
